@@ -172,6 +172,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/**
 	 * Add the given singleton factory for building the specified singleton
 	 * if necessary.
+	 * <p>如有必要，添加给定的单例工厂以构建指定的单例。
 	 * <p>To be called for eager registration of singletons, e.g. to be able to
 	 * resolve circular references.
 	 * @param beanName the name of the bean
@@ -314,9 +315,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/**
 	 * Register an exception that happened to get suppressed during the creation of a
 	 * singleton bean instance, e.g. a temporary circular reference resolution problem.
+	 * <p>注册在创建单例 bean 实例期间碰巧被抑制的异常，例如临时循环引用解析问题。
 	 * <p>The default implementation preserves any given exception in this registry's
 	 * collection of suppressed exceptions, up to a limit of 100 exceptions, adding
 	 * them as related causes to an eventual top-level {@link BeanCreationException}.
+	 * <p>默认实现会保留此注册表的已抑制异常集合中的任何给定异常，最多100个异常，将它们作为相关原因添加到最终的顶级BeanCreationException。
 	 * @param ex the Exception to register
 	 * @see BeanCreationException#getRelatedCauses()
 	 */
@@ -393,7 +396,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 	/**
 	 * Callback before singleton creation.
+	 * <p>单例创建之前的回调。
 	 * <p>The default implementation register the singleton as currently in creation.
+	 * <p>默认实现将单例注册为当前正在创建中。
 	 * @param beanName the name of the singleton about to be created
 	 * @see #isSingletonCurrentlyInCreation
 	 */
@@ -405,7 +410,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 	/**
 	 * Callback after singleton creation.
+	 * <p>创建单例后回调。
 	 * <p>The default implementation marks the singleton as not in creation anymore.
+	 * <p>默认实现将单例标记为不再创建。
 	 * @param beanName the name of the singleton that has been created
 	 * @see #isSingletonCurrentlyInCreation
 	 */
@@ -576,6 +583,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 	/**
 	 * Clear all cached singleton instances in this registry.
+	 * <p>清除此注册表中所有缓存的单例实例。
 	 * @since 4.3.15
 	 */
 	protected void clearSingletonCache() {
