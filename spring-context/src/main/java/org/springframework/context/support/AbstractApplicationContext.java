@@ -1096,8 +1096,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	public void close() {
 		synchronized (this.startupShutdownMonitor) {
 			doClose();
-			// If we registered a JVM shutdown hook, we don't need it anymore now:
-			// We've already explicitly closed the context.
+			/*
+			 * If we registered a JVM shutdown hook, we don't need it anymore now: We've already explicitly closed the context.
+			 * 如果我们注册了一个 JVM 关闭钩子，我们现在就不再需要它了：我们已经明确地关闭了上下文。
+			 */
 			if (this.shutdownHook != null) {
 				try {
 					Runtime.getRuntime().removeShutdownHook(this.shutdownHook);
@@ -1112,7 +1114,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Actually performs context closing: publishes a ContextClosedEvent and
 	 * destroys the singletons in the bean factory of this application context.
+	 * 实际执行上下文关闭：发布一个 ContextClosedEvent 并销毁此应用程序上下文的 bean 工厂中的单例。
 	 * <p>Called by both {@code close()} and a JVM shutdown hook, if any.
+	 * 由close()和 JVM 关闭挂钩，如果有close()调用。
 	 * @see org.springframework.context.event.ContextClosedEvent
 	 * @see #destroyBeans()
 	 * @see #close()
@@ -1131,14 +1135,20 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 
 			try {
-				// Publish shutdown event.
+				/*
+				 * Publish shutdown event.
+				 * 发布关闭事件
+				 */
 				publishEvent(new ContextClosedEvent(this));
 			}
 			catch (Throwable ex) {
 				logger.warn("Exception thrown from ApplicationListener handling ContextClosedEvent", ex);
 			}
 
-			// Stop all Lifecycle beans, to avoid delays during individual destruction.
+			/*
+			 * Stop all Lifecycle beans, to avoid delays during individual destruction.
+			 * 停止所有生命周期 Bean，以避免在单个销毁过程中出现延迟。
+			 */
 			if (this.lifecycleProcessor != null) {
 				try {
 					this.lifecycleProcessor.onClose();
@@ -1148,22 +1158,38 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				}
 			}
 
-			// Destroy all cached singletons in the context's BeanFactory.
+			/*
+			 * Destroy all cached singletons in the context's BeanFactory.
+			 * 销毁上下文的Bean工厂里所有缓存的单例
+			 */
 			destroyBeans();
 
-			// Close the state of this context itself.
+			/*
+			 * 关闭BeanFactory
+			 * Close the state of this context itself.
+			 * 关闭此上下文本身的状态。
+			 */
 			closeBeanFactory();
 
-			// Let subclasses do some final clean-up if they wish...
+			/*
+			 * Let subclasses do some final clean-up if they wish...
+			 * 让子类做些最后一步的清理
+			 */
 			onClose();
 
-			// Reset local application listeners to pre-refresh state.
+			/*
+			 * Reset local application listeners to pre-refresh state.
+			 * 将本地应用程序侦听器重置为刷新前状态。
+			 */
 			if (this.earlyApplicationListeners != null) {
 				this.applicationListeners.clear();
 				this.applicationListeners.addAll(this.earlyApplicationListeners);
 			}
 
-			// Switch to inactive.
+			/*
+			 * Switch to inactive.
+			 * 切换到非活动状态。
+			 */
 			this.active.set(false);
 		}
 	}
