@@ -568,7 +568,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			/*
-			 * 初始化BeanFactory
+			 * 初步初始化BeanFactory，加入一些内建Bean对象或Bean依赖，以及加上一些内建非Bean的依赖
 			 * Prepare the bean factory for use in this context.
 			 * 准备Bean工厂，以便在此上下文中使用。
 			 */
@@ -583,12 +583,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
 				/*
+				 * BeanFactory扩展点，通过执行BeanFactoryPostProcessor
 				 * Invoke factory processors registered as beans in the context.
 				 * 调用在上下文中注册为Bean的工厂处理器。
 				 */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				/*
+				 * 对Bean的一些修改或扩展
 				 * Register bean processors that intercept bean creation.
 				 * 注册拦截Bean创建的Bean处理器。
 				 */
@@ -596,12 +598,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				beanPostProcess.end();
 
 				/*
+				 * 国际化i18n
 				 * Initialize message source for this context.
 				 * 为此上下文初始化消息源。
 				 */
 				initMessageSource();
 
 				/*
+				 * 应用事件广播。具备或初始化事件的特性
 				 * Initialize event multicaster for this context.
 				 * 为此上下文初始化事件多播器。
 				 */
