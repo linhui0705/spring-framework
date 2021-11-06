@@ -119,7 +119,7 @@ public abstract class BeanDefinitionReaderUtils {
 		}
 
 		if (isInnerBean) {
-			// Inner bean: generate identity hashcode suffix.
+			// Inner bean: generate identity hashcode suffix. 内部bean：生成标识hashcode后缀。
 			return generatedBeanName + GENERATED_BEAN_NAME_SEPARATOR + ObjectUtils.getIdentityHexString(definition);
 		}
 
@@ -130,10 +130,11 @@ public abstract class BeanDefinitionReaderUtils {
 	/**
 	 * Turn the given bean name into a unique bean name for the given bean factory,
 	 * appending a unique counter as suffix if necessary.
-	 * @param beanName the original bean name
+	 * 将给定的 bean 名称转换为给定 bean 工厂的唯一 bean 名称，如有必要，附加一个唯一的计数器作为后缀。
+	 * @param beanName the original bean name 原始 bean 名称
 	 * @param registry the bean factory that the definition is going to be
-	 * registered with (to check for existing bean names)
-	 * @return the unique bean name to use
+	 * registered with (to check for existing bean names) 定义将要注册的 bean 工厂（检查现有 bean 名称）
+	 * @return the unique bean name to use 要使用的唯一 bean 名称
 	 * @since 5.1
 	 */
 	public static String uniqueBeanName(String beanName, BeanDefinitionRegistry registry) {

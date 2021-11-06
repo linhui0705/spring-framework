@@ -40,6 +40,7 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link GenericBeanDefinition}.
+	 * 创建一个新的BeanDefinitionBuilder用于构造一个GenericBeanDefinition 。
 	 */
 	public static BeanDefinitionBuilder genericBeanDefinition() {
 		return new BeanDefinitionBuilder(new GenericBeanDefinition());
@@ -47,7 +48,8 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link GenericBeanDefinition}.
-	 * @param beanClassName the class name for the bean that the definition is being created for
+	 * 创建一个新的BeanDefinitionBuilder用于构造一个GenericBeanDefinition 。
+	 * @param beanClassName the class name for the bean that the definition is being created for 为其创建定义的 bean 的类名
 	 */
 	public static BeanDefinitionBuilder genericBeanDefinition(String beanClassName) {
 		BeanDefinitionBuilder builder = new BeanDefinitionBuilder(new GenericBeanDefinition());
@@ -57,7 +59,8 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link GenericBeanDefinition}.
-	 * @param beanClass the {@code Class} of the bean that the definition is being created for
+	 * 创建一个新的BeanDefinitionBuilder用于构造一个GenericBeanDefinition 。
+	 * @param beanClass the {@code Class} of the bean that the definition is being created for 为其创建定义的 bean 的Class
 	 */
 	public static BeanDefinitionBuilder genericBeanDefinition(Class<?> beanClass) {
 		BeanDefinitionBuilder builder = new BeanDefinitionBuilder(new GenericBeanDefinition());
@@ -67,8 +70,9 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link GenericBeanDefinition}.
-	 * @param beanClass the {@code Class} of the bean that the definition is being created for
-	 * @param instanceSupplier a callback for creating an instance of the bean
+	 * 创建一个新的BeanDefinitionBuilder用于构造一个GenericBeanDefinition 。
+	 * @param beanClass the {@code Class} of the bean that the definition is being created for 为其创建定义的 bean 的Class
+	 * @param instanceSupplier a callback for creating an instance of the bean 用于创建 bean 实例的回调
 	 * @since 5.0
 	 */
 	public static <T> BeanDefinitionBuilder genericBeanDefinition(Class<T> beanClass, Supplier<T> instanceSupplier) {
@@ -80,7 +84,8 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link RootBeanDefinition}.
-	 * @param beanClassName the class name for the bean that the definition is being created for
+	 * 创建一个新的BeanDefinitionBuilder用于构造RootBeanDefinition 。
+	 * @param beanClassName the class name for the bean that the definition is being created for 为其创建定义的 bean 的类名
 	 */
 	public static BeanDefinitionBuilder rootBeanDefinition(String beanClassName) {
 		return rootBeanDefinition(beanClassName, null);
@@ -88,8 +93,9 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link RootBeanDefinition}.
-	 * @param beanClassName the class name for the bean that the definition is being created for
-	 * @param factoryMethodName the name of the method to use to construct the bean instance
+	 * 创建一个新的BeanDefinitionBuilder用于构造RootBeanDefinition 。
+	 * @param beanClassName the class name for the bean that the definition is being created for 为其创建定义的 bean 的类名
+	 * @param factoryMethodName the name of the method to use to construct the bean instance 用于构造 bean 实例的方法的名称
 	 */
 	public static BeanDefinitionBuilder rootBeanDefinition(String beanClassName, @Nullable String factoryMethodName) {
 		BeanDefinitionBuilder builder = new BeanDefinitionBuilder(new RootBeanDefinition());
@@ -100,7 +106,8 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link RootBeanDefinition}.
-	 * @param beanClass the {@code Class} of the bean that the definition is being created for
+	 * 创建一个新的BeanDefinitionBuilder用于构造RootBeanDefinition 。
+	 * @param beanClass the {@code Class} of the bean that the definition is being created for 为其创建定义的 bean 的Class
 	 */
 	public static BeanDefinitionBuilder rootBeanDefinition(Class<?> beanClass) {
 		return rootBeanDefinition(beanClass, (String) null);
@@ -108,8 +115,9 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link RootBeanDefinition}.
-	 * @param beanClass the {@code Class} of the bean that the definition is being created for
-	 * @param factoryMethodName the name of the method to use to construct the bean instance
+	 * 创建一个新的BeanDefinitionBuilder用于构造RootBeanDefinition 。
+	 * @param beanClass the {@code Class} of the bean that the definition is being created for 为其创建定义的 bean 的Class
+	 * @param factoryMethodName the name of the method to use to construct the bean instance 用于构造 bean 实例的方法的名称
 	 */
 	public static BeanDefinitionBuilder rootBeanDefinition(Class<?> beanClass, @Nullable String factoryMethodName) {
 		BeanDefinitionBuilder builder = new BeanDefinitionBuilder(new RootBeanDefinition());
@@ -120,6 +128,7 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link RootBeanDefinition}.
+	 * 创建一个新的BeanDefinitionBuilder用于构造RootBeanDefinition 。
 	 * @param beanType the {@link ResolvableType type} of the bean that the definition is being created for
 	 * @param instanceSupplier a callback for creating an instance of the bean
 	 * @since 5.3.9
@@ -133,8 +142,9 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link RootBeanDefinition}.
-	 * @param beanClass the {@code Class} of the bean that the definition is being created for
-	 * @param instanceSupplier a callback for creating an instance of the bean
+	 * 创建一个新的BeanDefinitionBuilder用于构造RootBeanDefinition 。
+	 * @param beanClass the {@code Class} of the bean that the definition is being created for 为其创建定义的 bean 的Class
+	 * @param instanceSupplier a callback for creating an instance of the bean 用于创建 bean 实例的回调
 	 * @since 5.3.9
 	 * @see #rootBeanDefinition(ResolvableType, Supplier)
 	 */
@@ -144,7 +154,8 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link ChildBeanDefinition}.
-	 * @param parentName the name of the parent bean
+	 * 创建一个新的BeanDefinitionBuilder用于构造ChildBeanDefinition 。
+	 * @param parentName the name of the parent bean 父 bean 的名称
 	 */
 	public static BeanDefinitionBuilder childBeanDefinition(String parentName) {
 		return new BeanDefinitionBuilder(new ChildBeanDefinition(parentName));
@@ -219,6 +230,7 @@ public final class BeanDefinitionBuilder {
 	/**
 	 * Add an indexed constructor arg value. The current index is tracked internally
 	 * and all additions are at the present point.
+	 * 添加索引构造函数 arg 值。 当前索引在内部进行跟踪，所有添加都在当前点。
 	 */
 	public BeanDefinitionBuilder addConstructorArgValue(@Nullable Object value) {
 		this.beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(
@@ -228,6 +240,7 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Add a reference to a named bean as a constructor arg.
+	 * 添加对命名 bean 的引用作为构造函数 arg。
 	 * @see #addConstructorArgValue(Object)
 	 */
 	public BeanDefinitionBuilder addConstructorArgReference(String beanName) {

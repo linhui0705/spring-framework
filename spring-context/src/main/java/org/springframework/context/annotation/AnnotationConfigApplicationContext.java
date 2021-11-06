@@ -33,14 +33,20 @@ import org.springframework.util.Assert;
  * in particular {@link Configuration @Configuration}-annotated classes, but also plain
  * {@link org.springframework.stereotype.Component @Component} types and JSR-330 compliant
  * classes using {@code jakarta.inject} annotations.
+ * 独立的应用程序上下文，接受组件类作为输入——特别是@Configuration注释的类，还有普通的@Component类型和使用jakarta.inject注释的 JSR-330 兼容类。
  *
  * <p>Allows for registering classes one by one using {@link #register(Class...)}
  * as well as for classpath scanning using {@link #scan(String...)}.
+ * 允许使用register(Class...)以及使用scan(String...)进行类路径扫描一一register(Class...) 。
+
  *
  * <p>In case of multiple {@code @Configuration} classes, {@link Bean @Bean} methods
  * defined in later classes will override those defined in earlier classes. This can
  * be leveraged to deliberately override certain bean definitions via an extra
  * {@code @Configuration} class.
+ * 在多个@Configuration类的情况下，在后面的类中定义的@Bean方法将覆盖在前面的类中定义的方法。
+ * 这可以用来通过额外的@Configuration类故意覆盖某些 bean 定义。
+ * 有关用法示例，请参阅@Configuration的 javadoc。
  *
  * <p>See {@link Configuration @Configuration}'s javadoc for usage examples.
  *
@@ -173,6 +179,8 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * Perform a scan within the specified base packages.
 	 * <p>Note that {@link #refresh()} must be called in order for the context
 	 * to fully process the new classes.
+	 * 在指定的基本包内执行扫描。
+	 * 请注意，必须调用refresh()以使上下文完全处理新类。
 	 * @param basePackages the packages to scan for component classes
 	 * @see #register(Class...)
 	 * @see #refresh()

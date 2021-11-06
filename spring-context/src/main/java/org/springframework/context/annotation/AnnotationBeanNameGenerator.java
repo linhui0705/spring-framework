@@ -40,16 +40,21 @@ import org.springframework.util.StringUtils;
  * meta-annotation. For example, Spring's stereotype annotations (such as
  * {@link org.springframework.stereotype.Repository @Repository}) are
  * themselves annotated with {@code @Component}.
+ * Bean 类的BeanNameGenerator实现用@Component注释或另一个注释注释，该注释本身用@Component作为元注释注释。
+ * 例如，Spring 的@Repository型注释（例如@Repository ）本身是用@Component注释的。
  *
  * <p>Also supports Jakarta EE's {@link jakarta.annotation.ManagedBean} and
  * JSR-330's {@link jakarta.inject.Named} annotations, if available. Note that
  * Spring component annotations always override such standard annotations.
+ * 还支持 Jakarta EE 的jakarta.annotation.ManagedBean和 JSR-330 的jakarta.inject.Named注释（如果可用）。
+ * 请注意，Spring 组件注释始终会覆盖此类标准注释。
  *
  * <p>If the annotation's value doesn't indicate a bean name, an appropriate
  * name will be built based on the short name of the class (with the first
  * letter lower-cased). For example:
- *
  * <pre class="code">com.xyz.FooServiceImpl -&gt; fooServiceImpl</pre>
+ * 如果注解的值未指明 bean 名称，则将根据类的短名称（首字母小写）构建适当的名称。 例如：
+ * com.xyz.FooServiceImpl -> fooServiceImpl
  *
  * @author Juergen Hoeller
  * @author Mark Fisher
