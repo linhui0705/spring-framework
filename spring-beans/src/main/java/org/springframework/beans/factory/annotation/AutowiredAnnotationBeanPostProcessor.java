@@ -74,13 +74,18 @@ import org.springframework.util.StringUtils;
  * config methods. Such members to be injected are detected through annotations:
  * by default, Spring's {@link Autowired @Autowired} and {@link Value @Value}
  * annotations.
+ * BeanPostProcessor实现，可自动装配带注解的字段、setter 方法和任意配置方法。
+ * 通过注解检测这些要注入的成员：默认情况下，Spring 的@Autowired和@Value注解。
  *
  * <p>Also supports the common {@link jakarta.inject.Inject @Inject} annotation,
  * if available, as a direct alternative to Spring's own {@code @Autowired}.
  * Additionally, it retains support for the {@code javax.inject.Inject} variant
  * dating back to the original JSR-330 specification (as known from Java EE 6-8).
+ * 还支持常见的@Inject注解（如果可用）作为 Spring 自己的@Autowired的直接替代。
+ * 此外，它还保留了对可追溯到原始 JSR-330 规范（从 Java EE 6-8 可知）的javax.inject.Inject变体的支持。
  *
  * <h3>Autowired Constructors</h3>
+ * 自动装配的构造函数
  * <p>Only one constructor of any given bean class may declare this annotation with
  * the 'required' attribute set to {@code true}, indicating <i>the</i> constructor
  * to autowire when used as a Spring bean. Furthermore, if the 'required' attribute
@@ -92,33 +97,50 @@ import org.springframework.util.StringUtils;
  * then a primary/default constructor (if present) will be used. If a class only
  * declares a single constructor to begin with, it will always be used, even if not
  * annotated. An annotated constructor does not have to be public.
+ * 任何给定的bean类只有一个构造函数可以用“需要”属性设置声明此批注true ，说明构造函数一个Spring bean使用时自动装配。
+ * 此外，如果 'required' 属性设置为true ，则只能使用@Autowired注解单个构造函数。 如果多个非必需构造函数声明了注解，它们将被视为自动装配的候选者。
+ * 将选择通过匹配 Spring 容器中的 bean 可以满足的依赖项数量最多的构造函数。
+ * 如果没有一个候选可以满足，那么将使用主/默认构造函数（如果存在）。
+ * 如果一个类只声明一个构造函数开始，它将始终被使用，即使没有注解。 带注解的构造函数不必是公共的。
  *
  * <h3>Autowired Fields</h3>
+ * 自动装配字段
  * <p>Fields are injected right after construction of a bean, before any
  * config methods are invoked. Such a config field does not have to be public.
+ * 在构建 bean 之后，在调用任何配置方法之前，立即注入字段。 这样的配置字段不必是公开的。
  *
  * <h3>Autowired Methods</h3>
+ * 自动装配方法
  * <p>Config methods may have an arbitrary name and any number of arguments; each of
  * those arguments will be autowired with a matching bean in the Spring container.
  * Bean property setter methods are effectively just a special case of such a
  * general config method. Config methods do not have to be public.
+ * 配置方法可以有任意名称和任意数量的参数； 这些参数中的每一个都将使用 Spring 容器中的匹配 bean 自动装配。
+ * Bean 属性 setter 方法实际上只是这种通用配置方法的一个特例。 配置方法不必是公开的。
  *
  * <h3>Annotation Config vs. XML Config</h3>
+ * 注解配置与 XML 配置
  * <p>A default {@code AutowiredAnnotationBeanPostProcessor} will be registered
  * by the "context:annotation-config" and "context:component-scan" XML tags.
  * Remove or turn off the default annotation configuration there if you intend
  * to specify a custom {@code AutowiredAnnotationBeanPostProcessor} bean definition.
+ * 默认的AutowiredAnnotationBeanPostProcessor将由“context:annotation-config”和“context:component-scan”XML 标签注册。
+ * 如果您打算指定自定义AutowiredAnnotationBeanPostProcessor bean 定义，请删除或关闭那里的默认注解配置。
  *
  * <p><b>NOTE:</b> Annotation injection will be performed <i>before</i> XML injection;
  * thus the latter configuration will override the former for properties wired through
  * both approaches.
+ * 注意：注解注入会在XML 注入之前进行； 因此，对于通过两种方法连接的属性，后一种配置将覆盖前者。
  *
  * <h3>{@literal @}Lookup Methods</h3>
+ * @Lookup 方法
  * <p>In addition to regular injection points as discussed above, this post-processor
  * also handles Spring's {@link Lookup @Lookup} annotation which identifies lookup
  * methods to be replaced by the container at runtime. This is essentially a type-safe
  * version of {@code getBean(Class, args)} and {@code getBean(String, args)}.
  * See {@link Lookup @Lookup's javadoc} for details.
+ * 除了上面讨论的常规注入点之外， @Lookup处理器还处理 Spring 的@Lookup注解，该注解标识要在运行时由容器替换的查找方法。
+ * 这本质上是getBean(Class, args)和getBean(String, args)的类型安全版本。 有关详细信息，请参阅@Lookup's javadoc 。
  *
  * @author Juergen Hoeller
  * @author Mark Fisher
@@ -158,6 +180,8 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	 * standard {@link Autowired @Autowired} and {@link Value @Value} annotations.
 	 * <p>Also supports the common {@link jakarta.inject.Inject @Inject} annotation,
 	 * if available, as well as the original {@code javax.inject.Inject} variant.
+	 * 为 Spring 的标准@Autowired和@Value注解创建一个新的AutowiredAnnotationBeanPostProcessor 。
+	 * 还支持常见的@Inject注解（如果可用）以及原始的javax.inject.Inject变体。
 	 */
 	@SuppressWarnings("unchecked")
 	public AutowiredAnnotationBeanPostProcessor() {
@@ -187,12 +211,15 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	/**
 	 * Set the 'autowired' annotation type, to be used on constructors, fields,
 	 * setter methods, and arbitrary config methods.
+	 * 设置 'autowired' 注解类型，用于构造函数、字段、setter 方法和任意配置方法。
 	 * <p>The default autowired annotation types are the Spring-provided
 	 * {@link Autowired @Autowired} and {@link Value @Value} annotations as well
 	 * as the common {@code @Inject} annotation, if available.
+	 * 默认的自动装配注解类型是 Spring 提供的@Autowired和@Value注解以及常见的@Inject注解（如果可用）。
 	 * <p>This setter property exists so that developers can provide their own
 	 * (non-Spring-specific) annotation type to indicate that a member is supposed
 	 * to be autowired.
+	 * 存在此 setter 属性，以便开发人员可以提供他们自己的（非 Spring 特定的）注解类型来指示应该自动装配成员。
 	 */
 	public void setAutowiredAnnotationType(Class<? extends Annotation> autowiredAnnotationType) {
 		Assert.notNull(autowiredAnnotationType, "'autowiredAnnotationType' must not be null");
@@ -203,12 +230,15 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	/**
 	 * Set the 'autowired' annotation types, to be used on constructors, fields,
 	 * setter methods, and arbitrary config methods.
+	 * 设置“自动装配”注解类型，用于构造函数、字段、setter 方法和任意配置方法。
 	 * <p>The default autowired annotation types are the Spring-provided
 	 * {@link Autowired @Autowired} and {@link Value @Value} annotations as well
 	 * as the common {@code @Inject} annotation, if available.
+	 * 默认的自动装配注解类型是 Spring 提供的@Autowired和@Value注解以及常见的@Inject注解（如果可用）。
 	 * <p>This setter property exists so that developers can provide their own
 	 * (non-Spring-specific) annotation types to indicate that a member is supposed
 	 * to be autowired.
+	 * 存在此 setter 属性，以便开发人员可以提供他们自己的（非 Spring 特定的）注解类型来指示应该自动装配成员。
 	 */
 	public void setAutowiredAnnotationTypes(Set<Class<? extends Annotation>> autowiredAnnotationTypes) {
 		Assert.notEmpty(autowiredAnnotationTypes, "'autowiredAnnotationTypes' must not be empty");
@@ -218,6 +248,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Set the name of an attribute of the annotation that specifies whether it is required.
+	 * 设置注解的属性名称，指定是否需要它。
 	 * @see #setRequiredParameterValue(boolean)
 	 */
 	public void setRequiredParameterName(String requiredParameterName) {
@@ -226,8 +257,10 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Set the boolean value that marks a dependency as required.
+	 * 根据需要设置标记依赖项的布尔值。
 	 * <p>For example if using 'required=true' (the default), this value should be
 	 * {@code true}; but if using 'optional=false', this value should be {@code false}.
+	 * 例如，如果使用 'required=true'（默认值），则该值应为true ； 但是如果使用 'optional=false'，这个值应该是false 。
 	 * @see #setRequiredParameterName(String)
 	 */
 	public void setRequiredParameterValue(boolean requiredParameterValue) {
@@ -431,6 +464,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	 * 'Native' processing method for direct calls with an arbitrary target instance,
 	 * resolving all of its fields and methods which are annotated with one of the
 	 * configured 'autowired' annotation types.
+	 * 使用任意目标实例直接调用的“本机”处理方法，解析其所有字段和方法，这些字段和方法使用配置的“自动装配”注解类型之一进行注释。
 	 * @param bean the target instance to process
 	 * @throws BeanCreationException if autowiring failed
 	 * @see #setAutowiredAnnotationTypes(Set)
@@ -543,9 +577,11 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Determine if the annotated field or method requires its dependency.
+	 * 确定带注解的字段或方法是否需要其依赖项。
 	 * <p>A 'required' dependency means that autowiring should fail when no beans
 	 * are found. Otherwise, the autowiring process will simply bypass the field
 	 * or method when no beans are found.
+	 * 'required' 依赖意味着当没有找到 bean 时自动装配应该失败。 否则，当没有找到 bean 时，自动装配过程将简单地绕过字段或方法。
 	 * @param ann the Autowired annotation
 	 * @return whether the annotation indicates that a dependency is required
 	 */
@@ -556,9 +592,11 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Determine if the annotated field or method requires its dependency.
+	 * 确定带注解的字段或方法是否需要其依赖项。
 	 * <p>A 'required' dependency means that autowiring should fail when no beans
 	 * are found. Otherwise, the autowiring process will simply bypass the field
 	 * or method when no beans are found.
+	 * 'required' 依赖意味着当没有找到 bean 时自动装配应该失败。 否则，当没有找到 bean 时，自动装配过程将简单地绕过字段或方法。
 	 * @param ann the Autowired annotation
 	 * @return whether the annotation indicates that a dependency is required
 	 * @deprecated since 5.2, in favor of {@link #determineRequiredStatus(MergedAnnotation)}
@@ -571,6 +609,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Obtain all beans of the given type as autowire candidates.
+	 * 获取给定类型的所有 bean 作为自动装配候选者。
 	 * @param type the type of the bean
 	 * @return the target beans, or an empty Collection if no bean of this type is found
 	 * @throws BeansException if bean retrieval failed
@@ -585,6 +624,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Register the specified bean as dependent on the autowired beans.
+	 * 将指定的 bean 注册为依赖于自动装配的 bean。
 	 */
 	private void registerDependentBeans(@Nullable String beanName, Set<String> autowiredBeanNames) {
 		if (beanName != null) {
@@ -602,6 +642,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Resolve the specified cached method argument or field value.
+	 * 解析指定的缓存方法参数或字段值。
 	 */
 	@Nullable
 	private Object resolvedCachedArgument(@Nullable String beanName, @Nullable Object cachedArgument) {
@@ -618,6 +659,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Class representing injection information about an annotated field.
+	 * 表示有关注解字段的注入信息的类。
 	 */
 	private class AutowiredFieldElement extends InjectionMetadata.InjectedElement {
 
@@ -695,6 +737,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Class representing injection information about an annotated method.
+	 * 表示有关注解方法的注入信息的类。
 	 */
 	private class AutowiredMethodElement extends InjectionMetadata.InjectedElement {
 
@@ -810,6 +853,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * DependencyDescriptor variant with a pre-resolved target bean name.
+	 * 具有预先解析的目标 bean 名称的 DependencyDescriptor 变体。
 	 */
 	@SuppressWarnings("serial")
 	private static class ShortcutDependencyDescriptor extends DependencyDescriptor {

@@ -54,6 +54,8 @@ import org.springframework.util.CollectionUtils;
  * Registers {@link EventListener} methods as individual {@link ApplicationListener} instances.
  * Implements {@link BeanFactoryPostProcessor} (as of 5.1) primarily for early retrieval,
  * avoiding AOP checks for this processor bean and its {@link EventListenerFactory} delegates.
+ * 将EventListener方法注册为单独的ApplicationListener实例。
+ * 实现BeanFactoryPostProcessor （从 5.1 开始）主要用于早期检索，避免对此处理器 bean 及其EventListenerFactory委托进行 AOP 检查。
  *
  * @author Stephane Nicoll
  * @author Juergen Hoeller
@@ -68,7 +70,9 @@ public class EventListenerMethodProcessor
 	/**
 	 * Boolean flag controlled by a {@code spring.spel.ignore} system property that instructs Spring to
 	 * ignore SpEL, i.e. to not initialize the SpEL infrastructure.
+	 * 由spring.spel.ignore系统属性控制的布尔标志，指示 Spring 忽略 SpEL，即不初始化 SpEL 基础结构。
 	 * <p>The default is "false".
+	 * 默认值为“假”。
 	 */
 	private static final boolean shouldIgnoreSpel = SpringProperties.getFlag("spring.spel.ignore");
 
@@ -218,6 +222,7 @@ public class EventListenerMethodProcessor
 	 * Determine whether the given class is an {@code org.springframework}
 	 * bean class that is not annotated as a user or test {@link Component}...
 	 * which indicates that there is no {@link EventListener} to be found there.
+	 * 确定给定的类是否是一个org.springframework bean 类，它没有被注释为用户或测试Component ......这表明在那里找不到EventListener 。
 	 * @since 5.1
 	 */
 	private static boolean isSpringContainerClass(Class<?> clazz) {

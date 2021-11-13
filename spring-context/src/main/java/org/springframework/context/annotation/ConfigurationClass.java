@@ -36,8 +36,10 @@ import org.springframework.util.ClassUtils;
 
 /**
  * Represents a user-defined {@link Configuration @Configuration} class.
+ * 代表一个用户定义的@Configuration类。
  * <p>Includes a set of {@link Bean} methods, including all such methods
  * defined in the ancestry of the class, in a 'flattened-out' manner.
+ * 包括一组Bean方法，包括在类的祖先中以“扁平化”方式定义的所有此类方法。
  *
  * @author Chris Beams
  * @author Juergen Hoeller

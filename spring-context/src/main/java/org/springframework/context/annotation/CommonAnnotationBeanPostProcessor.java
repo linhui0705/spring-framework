@@ -72,11 +72,15 @@ import org.springframework.util.StringValueResolver;
  * that supports common Java annotations out of the box, in particular the common
  * annotations in the {@code jakarta.annotation} package. These common Java
  * annotations are supported in many Jakarta EE technologies (e.g. JSF and JAX-RS).
+ * <p>org.springframework.beans.factory.config.BeanPostProcessor实现，支持开箱即用的通用 Java 注释，特别是jakarta.annotation包中的通用注释。
+ * <p>许多 Jakarta EE 技术（例如 JSF 和 JAX-RS）都支持这些常见的 Java 注释。
  *
  * <p>This post-processor includes support for the {@link jakarta.annotation.PostConstruct}
  * and {@link jakarta.annotation.PreDestroy} annotations - as init annotation
  * and destroy annotation, respectively - through inheriting from
  * {@link InitDestroyAnnotationBeanPostProcessor} with pre-configured annotation types.
+ * <p>InitDestroyAnnotationBeanPostProcessor处理器包括对PostConstruct和PreDestroy批注的支持——
+ * 分别作为 init 批注和 destroy 批注——通过从具有预配置批注类型的InitDestroyAnnotationBeanPostProcessor继承。
  *
  * <p>The central element is the {@link jakarta.annotation.Resource} annotation
  * for annotation-driven injection of named beans, by default from the containing
@@ -85,20 +89,27 @@ import org.springframework.util.StringValueResolver;
  * equivalent to standard Jakarta EE resource injection for {@code name} references
  * and default names as well. The target beans can be simple POJOs, with no special
  * requirements other than the type having to match.
+ * <p>中心元素是Resource注释驱动的命名 bean 注入，默认情况下来自包含的 Spring BeanFactory，在 JNDI 中只解析了mappedName引用。
+ * "alwaysUseJndiLookup" flag强制 JNDI 查找等同于标准 Jakarta EE 资源注入，用于name引用和默认名称。
+ * 目标 bean 可以是简单的 POJO，除了必须匹配的类型之外没有其他特殊要求。
  *
  * <p>This post-processor also supports the EJB 3 {@link jakarta.ejb.EJB} annotation,
  * analogous to {@link jakarta.annotation.Resource}, with the capability to
  * specify both a local bean name and a global JNDI name for fallback retrieval.
  * The target beans can be plain POJOs as well as EJB 3 Session Beans in this case.
+ * <p>此后处理器还支持 EJB 3 EJB批注，类似于Resource ，具有为回退检索指定本地 bean 名称和全局 JNDI 名称的能力。
+ * 在这种情况下，目标 bean 可以是普通的 POJO 以及 EJB 3 会话 Bean。
  *
  * <p>For default usage, resolving resource names as Spring bean names,
  * simply define the following in your application context:
+ * <p>对于默认用法，将资源名称解析为 Spring bean 名称，只需在应用程序上下文中定义以下内容：
  *
  * <pre class="code">
  * &lt;bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/&gt;</pre>
  *
  * For direct JNDI access, resolving resource names as JNDI resource references
  * within the Jakarta EE application's "java:comp/env/" namespace, use the following:
+ * <p>对于直接 JNDI 访问，将资源名称解析为 Jakarta EE 应用程序的“java:comp/env/”命名空间中的 JNDI 资源引用，请使用以下内容：
  *
  * <pre class="code">
  * &lt;bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"&gt;
@@ -109,14 +120,19 @@ import org.springframework.util.StringValueResolver;
  * allowing for global JNDI names (including "java:" prefix) as well. The
  * "alwaysUseJndiLookup" flag just affects {@code name} references and
  * default names (inferred from the field name / property name).
+ * <p>mappedName引用将始终在 JNDI 中解析，也允许全局 JNDI 名称（包括“java:”前缀）。
+ * “alwaysUseJndiLookup”标志只影响name引用和默认名称（从字段名称/属性名称推断）。
  *
  * <p><b>NOTE:</b> A default CommonAnnotationBeanPostProcessor will be registered
  * by the "context:annotation-config" and "context:component-scan" XML tags.
  * Remove or turn off the default annotation configuration there if you intend
  * to specify a custom CommonAnnotationBeanPostProcessor bean definition!
+ * <p>注意：默认的 CommonAnnotationBeanPostProcessor 将由 "context:annotation-config" 和 "context:component-scan" XML 标签注册。
+ * 如果您打算指定自定义 CommonAnnotationBeanPostProcessor bean 定义，请删除或关闭那里的默认注释配置！
  * <p><b>NOTE:</b> Annotation injection will be performed <i>before</i> XML injection; thus
  * the latter configuration will override the former for properties wired through
  * both approaches.
+ * <p>注意：注解注入会在XML 注入之前进行； 因此，对于通过两种方法连接的属性，后一种配置将覆盖前者。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
