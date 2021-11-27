@@ -120,6 +120,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	 * is the {@link jakarta.annotation.PostConstruct} annotation.
 	 */
 	public void setInitAnnotationType(Class<? extends Annotation> initAnnotationType) {
+		// 可更换@PostConstruct注解
 		this.initAnnotationType = initAnnotationType;
 	}
 
@@ -131,6 +132,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	 * is the {@link jakarta.annotation.PreDestroy} annotation.
 	 */
 	public void setDestroyAnnotationType(Class<? extends Annotation> destroyAnnotationType) {
+		// 可更换@PreDestroy注解
 		this.destroyAnnotationType = destroyAnnotationType;
 	}
 
@@ -146,6 +148,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		// 包含初始化和销毁两个阶段
 		LifecycleMetadata metadata = findLifecycleMetadata(beanType);
 		metadata.checkConfigMembers(beanDefinition);
 	}
@@ -154,6 +157,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
+			//
 			metadata.invokeInitMethods(bean, beanName);
 		}
 		catch (InvocationTargetException ex) {
@@ -174,6 +178,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
+			//
 			metadata.invokeDestroyMethods(bean, beanName);
 		}
 		catch (InvocationTargetException ex) {
@@ -330,6 +335,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 					if (logger.isTraceEnabled()) {
 						logger.trace("Invoking init method on bean '" + beanName + "': " + element.getMethod());
 					}
+					// 调用初始化的方法
 					element.invoke(target);
 				}
 			}
@@ -344,6 +350,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 					if (logger.isTraceEnabled()) {
 						logger.trace("Invoking destroy method on bean '" + beanName + "': " + element.getMethod());
 					}
+					// 调用销毁的方法
 					element.invoke(target);
 				}
 			}

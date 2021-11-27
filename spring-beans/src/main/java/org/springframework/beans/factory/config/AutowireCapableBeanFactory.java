@@ -30,16 +30,21 @@ import org.springframework.lang.Nullable;
  * interface to be implemented by bean factories that are capable of
  * autowiring, provided that they want to expose this functionality for
  * existing bean instances.
+ * BeanFactory接口的扩展将由能够自动装配的 bean 工厂实现，前提是它们希望为现有 bean 实例公开此功能。
  *
  * <p>This subinterface of BeanFactory is not meant to be used in normal
  * application code: stick to {@link org.springframework.beans.factory.BeanFactory}
  * or {@link org.springframework.beans.factory.ListableBeanFactory} for
  * typical use cases.
+ * BeanFactory 的这个子接口不打算在正常的应用程序代码中使用：
+ * 对于典型用例，坚持使用BeanFactory或org.springframework.beans.factory.ListableBeanFactory 。
  *
  * <p>Integration code for other frameworks can leverage this interface to
  * wire and populate existing bean instances that Spring does not control
  * the lifecycle of. This is particularly useful for WebWork Actions and
  * Tapestry Page objects, for example.
+ * 其他框架的集成代码可以利用这个接口来连接和填充 Spring 不控制其生命周期的现有 bean 实例。
+ * 例如，这对于 WebWork Actions 和 Tapestry Page 对象特别有用。
  *
  * <p>Note that this interface is not implemented by
  * {@link org.springframework.context.ApplicationContext} facades,
@@ -47,11 +52,15 @@ import org.springframework.lang.Nullable;
  * from an application context too, accessible through ApplicationContext's
  * {@link org.springframework.context.ApplicationContext#getAutowireCapableBeanFactory()}
  * method.
+ * 请注意，此接口不是由org.springframework.context.ApplicationContext门面实现的，因为它几乎从未被应用程序代码使用过。
+ * 也就是说，它也可以从应用程序上下文中获得，可以通过 ApplicationContext 的org.springframework.context.ApplicationContext.getAutowireCapableBeanFactory()方法访问。
  *
  * <p>You may also implement the {@link org.springframework.beans.factory.BeanFactoryAware}
  * interface, which exposes the internal BeanFactory even when running in an
  * ApplicationContext, to get access to an AutowireCapableBeanFactory:
  * simply cast the passed-in BeanFactory to AutowireCapableBeanFactory.
+ * 您还可以实现org.springframework.beans.factory.BeanFactoryAware接口，即使在 ApplicationContext 中运行时，它也会公开内部 BeanFactory 以访问 AutowireCapableBeanFactory：
+ * 只需将传入的 BeanFactory 强制转换为 AutowireCapableBeanFactory。
  *
  * @author Juergen Hoeller
  * @since 04.12.2003
@@ -64,6 +73,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates no externally defined autowiring. Note that
 	 * BeanFactoryAware etc and annotation-driven injection will still be applied.
+	 * 表示没有外部定义的自动装配的常量。 请注意，仍将应用 BeanFactoryAware 等和注解驱动的注入。
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
@@ -73,6 +83,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates autowiring bean properties by name
 	 * (applying to all bean property setters).
+	 * 按名称指示自动装配 bean 属性的常量（适用于所有 bean 属性设置器）。
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
@@ -82,6 +93,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates autowiring bean properties by type
 	 * (applying to all bean property setters).
+	 * 按类型指示自动装配 bean 属性的常量（适用于所有 bean 属性设置器）。
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
@@ -91,6 +103,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates autowiring the greediest constructor that
 	 * can be satisfied (involves resolving the appropriate constructor).
+	 * 指示自动装配可以满足的最贪婪的构造函数的常量（涉及解析适当的构造函数）。
 	 * @see #createBean
 	 * @see #autowire
 	 */
@@ -99,10 +112,12 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates determining an appropriate autowire strategy
 	 * through introspection of the bean class.
+	 * 指示通过自省 bean 类确定适当的自动装配策略的常量。
 	 * @see #createBean
 	 * @see #autowire
 	 * @deprecated as of Spring 3.0: If you are using mixed autowiring strategies,
 	 * prefer annotation-based autowiring for clearer demarcation of autowiring needs.
+	 * 从 Spring 3.0 开始：如果您使用混合自动装配策略，请更喜欢基于注释的自动装配，以便更清晰地划分自动装配需求。
 	 */
 	@Deprecated
 	int AUTOWIRE_AUTODETECT = 4;
@@ -367,12 +382,13 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 
 	/**
 	 * Resolve the specified dependency against the beans defined in this factory.
-	 * @param descriptor the descriptor for the dependency (field/method/constructor)
-	 * @param requestingBeanName the name of the bean which declares the given dependency
-	 * @return the resolved object, or {@code null} if none found
-	 * @throws NoSuchBeanDefinitionException if no matching bean was found
-	 * @throws NoUniqueBeanDefinitionException if more than one matching bean was found
-	 * @throws BeansException if dependency resolution failed for any other reason
+	 * 针对此工厂中定义的 bean 解析指定的依赖项。
+	 * @param descriptor the descriptor for the dependency (field/method/constructor) 依赖项的描述符（字段/方法/构造函数）
+	 * @param requestingBeanName the name of the bean which declares the given dependency 声明给定依赖项的 bean 的名称
+	 * @return the resolved object, or {@code null} if none found 解析的对象，如果没有找到，则为null
+	 * @throws NoSuchBeanDefinitionException if no matching bean was found 如果没有找到匹配的 bean
+	 * @throws NoUniqueBeanDefinitionException if more than one matching bean was found 如果找到多个匹配的 bean
+	 * @throws BeansException if dependency resolution failed for any other reason 如果依赖解析因任何其他原因失败
 	 * @since 2.5
 	 * @see #resolveDependency(DependencyDescriptor, String, Set, TypeConverter)
 	 */
@@ -381,15 +397,16 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 
 	/**
 	 * Resolve the specified dependency against the beans defined in this factory.
-	 * @param descriptor the descriptor for the dependency (field/method/constructor)
-	 * @param requestingBeanName the name of the bean which declares the given dependency
+	 * 针对此工厂中定义的 bean 解析指定的依赖项。
+	 * @param descriptor the descriptor for the dependency (field/method/constructor) 依赖项的描述符（字段/方法/构造函数）
+	 * @param requestingBeanName the name of the bean which declares the given dependency 声明给定依赖项的 bean 的名称
 	 * @param autowiredBeanNames a Set that all names of autowired beans (used for
-	 * resolving the given dependency) are supposed to be added to
-	 * @param typeConverter the TypeConverter to use for populating arrays and collections
-	 * @return the resolved object, or {@code null} if none found
-	 * @throws NoSuchBeanDefinitionException if no matching bean was found
-	 * @throws NoUniqueBeanDefinitionException if more than one matching bean was found
-	 * @throws BeansException if dependency resolution failed for any other reason
+	 * resolving the given dependency) are supposed to be added to 应该将所有自动装配 bean 的名称（用于解析给定依赖项）添加到的 Set
+	 * @param typeConverter the TypeConverter to use for populating arrays and collections 用于填充数组和集合的 TypeConverter
+	 * @return the resolved object, or {@code null} if none found 解析的对象，如果没有找到，则为null
+	 * @throws NoSuchBeanDefinitionException if no matching bean was found 如果没有找到匹配的 bean
+	 * @throws NoUniqueBeanDefinitionException if more than one matching bean was found 如果找到多个匹配的 bean
+	 * @throws BeansException if dependency resolution failed for any other reason 如果依赖解析因任何其他原因失败
 	 * @since 2.5
 	 * @see DependencyDescriptor
 	 */

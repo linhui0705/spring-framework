@@ -185,9 +185,11 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	 */
 	@SuppressWarnings("unchecked")
 	public AutowiredAnnotationBeanPostProcessor() {
+		// 优先级：@Autowired -> @Value -> @Inject
 		this.autowiredAnnotationTypes.add(Autowired.class);
 		this.autowiredAnnotationTypes.add(Value.class);
 
+		// jakarta.inject.Inject @Inject可选支持
 		try {
 			this.autowiredAnnotationTypes.add((Class<? extends Annotation>)
 					ClassUtils.forName("jakarta.inject.Inject", AutowiredAnnotationBeanPostProcessor.class.getClassLoader()));
@@ -197,6 +199,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			// jakarta.inject API not available - simply skip.
 		}
 
+		// javax.inject.Inject @Inject可选支持
 		try {
 			this.autowiredAnnotationTypes.add((Class<? extends Annotation>)
 					ClassUtils.forName("javax.inject.Inject", AutowiredAnnotationBeanPostProcessor.class.getClassLoader()));
@@ -288,6 +291,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		// 产生一次查找，从缓存查找，只是检查配置
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
 		metadata.checkConfigMembers(beanDefinition);
 	}
@@ -441,6 +445,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
 		try {
+			// 注入操作
 			metadata.inject(bean, beanName, pvs);
 		}
 		catch (BeanCreationException ex) {
@@ -486,9 +491,15 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 
 	private InjectionMetadata findAutowiringMetadata(String beanName, Class<?> clazz, @Nullable PropertyValues pvs) {
-		// Fall back to class name as cache key, for backwards compatibility with custom callers.
+		/*
+		 * Fall back to class name as cache key, for backwards compatibility with custom callers.
+		 * 回退到类名作为缓存键，以便与自定义调用者向后兼容。
+		 */
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
-		// Quick check on the concurrent map first, with minimal locking.
+		/*
+		 * Quick check on the concurrent map first, with minimal locking.
+		 * 首先快速检查并发映射，使用最少的锁定。
+		 */
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 			synchronized (this.injectionMetadataCache) {
@@ -513,18 +524,27 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		List<InjectionMetadata.InjectedElement> elements = new ArrayList<>();
 		Class<?> targetClass = clazz;
 
+		// do-while循环
 		do {
 			final List<InjectionMetadata.InjectedElement> currElements = new ArrayList<>();
 
+			/*
+			 * 在给定类中的所有本地声明的字段上调用给定的回调。
+			 * 找当前类，LocalFields
+			 */
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
+				// 找Autowired注解
 				MergedAnnotation<?> ann = findAutowiredAnnotation(field);
+				// 凡是发现Annotation都会去做
 				if (ann != null) {
+					// 如果是static字段，会提示不支持
 					if (Modifier.isStatic(field.getModifiers())) {
 						if (logger.isInfoEnabled()) {
 							logger.info("Autowired annotation is not supported on static fields: " + field);
 						}
 						return;
 					}
+					// 判断是否required
 					boolean required = determineRequiredStatus(ann);
 					currElements.add(new AutowiredFieldElement(field, required));
 				}
@@ -556,8 +576,10 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			});
 
 			elements.addAll(0, currElements);
+			// 找它的parent，一直找到object为止
 			targetClass = targetClass.getSuperclass();
 		}
+		// do-while循环 递归地去找它父类里面以及父类的父类里面，一直找到它的最根本的那个类里面
 		while (targetClass != null && targetClass != Object.class);
 
 		return InjectionMetadata.forElements(elements, clazz);
@@ -566,6 +588,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	@Nullable
 	private MergedAnnotation<?> findAutowiredAnnotation(AccessibleObject ao) {
 		MergedAnnotations annotations = MergedAnnotations.from(ao);
+		// for循环，按顺序依次查找
 		for (Class<? extends Annotation> type : this.autowiredAnnotationTypes) {
 			MergedAnnotation<?> annotation = annotations.get(type);
 			if (annotation.isPresent()) {
@@ -684,6 +707,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 					value = resolvedCachedArgument(beanName, this.cachedFieldValue);
 				}
 				catch (NoSuchBeanDefinitionException ex) {
+					// 2021-02-15修改，在 NoSuchBeanDefinitionException的情况下重新解析缓存的参数
 					// Unexpected removal of target bean for cached argument -> re-resolve
 					value = resolveFieldValue(field, bean, beanName);
 				}
@@ -692,6 +716,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				value = resolveFieldValue(field, bean, beanName);
 			}
 			if (value != null) {
+				// 通过反射回填值
 				ReflectionUtils.makeAccessible(field);
 				field.set(bean, value);
 			}
@@ -699,6 +724,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		@Nullable
 		private Object resolveFieldValue(Field field, Object bean, @Nullable String beanName) {
+			//
 			DependencyDescriptor desc = new DependencyDescriptor(field, this.required);
 			desc.setContainingClass(bean.getClass());
 			Set<String> autowiredBeanNames = new LinkedHashSet<>(1);
@@ -706,6 +732,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			TypeConverter typeConverter = beanFactory.getTypeConverter();
 			Object value;
 			try {
+				// 依赖的处理或依赖的查找过程
 				value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter);
 			}
 			catch (BeansException ex) {

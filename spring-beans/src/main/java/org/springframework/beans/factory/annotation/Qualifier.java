@@ -27,6 +27,7 @@ import java.lang.annotation.Target;
  * This annotation may be used on a field or parameter as a qualifier for
  * candidate beans when autowiring. It may also be used to annotate other
  * custom annotations that can then in turn be used as qualifiers.
+ * 自动装配时，此注释可用于字段或参数作为候选 bean 的限定符。 它还可以用于注释其他自定义注释，然后可以将其用作限定符。
  *
  * @author Mark Fisher
  * @author Juergen Hoeller

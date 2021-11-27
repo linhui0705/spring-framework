@@ -165,7 +165,7 @@ public class InjectionMetadata {
 	 * A single injected element.
 	 */
 	public abstract static class InjectedElement {
-
+		// 在Java反射有三种：field, method, Constructor
 		protected final Member member;
 
 		protected final boolean isField;
